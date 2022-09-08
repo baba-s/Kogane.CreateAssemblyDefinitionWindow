@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
@@ -105,7 +106,7 @@ namespace Kogane.Internal
             var data = new AssemblyDefinitionJson
             {
                 name             = Path.GetFileNameWithoutExtension( uniquePath ),
-                includePlatforms = m_isEditor ? new[] { "Editor" } : new string[ 0 ],
+                includePlatforms = m_isEditor ? new[] { "Editor" } : Array.Empty<string>(),
                 autoReferenced   = m_autoReferenced,
             };
 

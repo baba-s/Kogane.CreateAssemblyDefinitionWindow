@@ -6,15 +6,15 @@ namespace Kogane.Internal
     internal sealed class AssemblyDefinitionJson
     {
         public string   name             = string.Empty;
-        public string[] references       = new string[ 0 ];
-        public string[] includePlatforms = new string[ 0 ];
-        public string[] excludePlatforms = new string[ 0 ];
+        public string[] references       = Array.Empty<string>();
+        public string[] includePlatforms = Array.Empty<string>();
+        public string[] excludePlatforms = Array.Empty<string>();
         public bool     allowUnsafeCode;
         public bool     overrideReferences;
-        public string[] precompiledReferences = new string[ 0 ];
+        public string[] precompiledReferences = Array.Empty<string>();
         public bool     autoReferenced;
-        public string[] defineConstraints = new string[ 0 ];
-        public string[] versionDefines    = new string[ 0 ];
+        public string[] defineConstraints = Array.Empty<string>();
+        public string[] versionDefines    = Array.Empty<string>();
         public bool     noEngineReferences;
     }
 }
