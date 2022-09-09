@@ -1,11 +1,15 @@
 ﻿using System;
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable NotAccessedField.Global
+
 namespace Kogane.Internal
 {
     [Serializable]
     internal sealed class AssemblyDefinitionJson
     {
         public string   name             = string.Empty;
+        public string   rootNamespace    = string.Empty;
         public string[] references       = Array.Empty<string>();
         public string[] includePlatforms = Array.Empty<string>();
         public string[] excludePlatforms = Array.Empty<string>();
