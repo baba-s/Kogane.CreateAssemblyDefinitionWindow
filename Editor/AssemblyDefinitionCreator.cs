@@ -103,7 +103,7 @@ namespace Kogane.Internal
             var path       = $"{m_directory}/{m_name}.asmdef";
             var uniquePath = AssetDatabase.GenerateUniqueAssetPath( path );
 
-            var data = new AssemblyDefinitionJson
+            var data = new JsonAssemblyDefinition
             {
                 name             = Path.GetFileNameWithoutExtension( uniquePath ),
                 includePlatforms = m_isEditor ? new[] { "Editor" } : Array.Empty<string>(),
