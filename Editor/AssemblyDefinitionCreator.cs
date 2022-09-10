@@ -21,7 +21,7 @@ namespace Kogane.Internal
         private bool   m_autoReferenced = true;
         private bool   m_isInitialized;
 
-        [MenuItem( "Assets/Kogane/Open Assembly Definition Creator", priority = 1552416624 )]
+        [MenuItem( "Assets/Kogane/Create Assembly Definition", priority = 1156162169 )]
         private static void Open()
         {
             var asset     = Selection.activeObject;
