@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Kogane.Internal
 {
-    internal sealed class AssemblyDefinitionCreator : EditorWindow
+    internal sealed class CreateAssemblyDefinitionWindow : EditorWindow
     {
         private const float WINDOW_HEIGHT = 164;
         private const float LABEL_WIDTH   = 144;
@@ -38,15 +38,15 @@ namespace Kogane.Internal
                     ;
             }
 
-            var window = GetWindow<AssemblyDefinitionCreator>
+            var window = GetWindow<CreateAssemblyDefinitionWindow>
             (
                 utility: true,
-                title: "Assembly Definition Creator",
+                title: "Create Assembly Definition",
                 focus: true
             );
 
             window.m_directory = directory;
-            window.m_isEditor  = directory.Split( '/' ).Any( x => x == "Editor" );
+            window.m_isEditor  = directory.Split( '/' ).Contains( "Editor" );
 
             var minSize = window.minSize;
             var maxSize = window.maxSize;

@@ -1,5 +1,5 @@
 {
-    "name": "Kogane.AssemblyDefinitionCreator",
+    "name": "Kogane.CreateAssemblyDefinitionWindow",
     "rootNamespace": "",
     "references": [
         "GUID:f79b208da70018b4e99cfff6da005587"

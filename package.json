@@ -1,6 +1,6 @@
 {
-    "name": "com.baba-s.kogane-assembly-definition-creator",
-    "displayName": "Kogane Assembly Definition Creator",
+    "name": "com.baba-s.kogane-create-assembly-definition-window",
+    "displayName": "Kogane Create Assembly Definition Window",
     "version": "1.0.0",
     "unity": "2022.1",
     "author": "baba-s",

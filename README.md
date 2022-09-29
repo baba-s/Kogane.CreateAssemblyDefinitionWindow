@@ -1,4 +1,4 @@
-# Kogane Assembly Definition Creator
+# Kogane Create Assembly Definition Window
 
 Assembly Definition を作成する時のコンパイル回数を抑えられるエディタ拡張
 
