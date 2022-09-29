@@ -21,6 +21,8 @@ namespace Kogane.Internal
         private bool   m_autoReferenced = true;
         private bool   m_isInitialized;
 
+        private bool CanCreate => !string.IsNullOrWhiteSpace( m_name );
+
         [MenuItem( "Assets/Kogane/Create Assembly Definition", priority = 1156162169 )]
         private static void Open()
         {
@@ -62,9 +64,12 @@ namespace Kogane.Internal
 
             if ( current.keyCode == KeyCode.Return )
             {
-                OnCreate();
-                current.Use();
-                return;
+                if ( CanCreate )
+                {
+                    OnCreate();
+                    current.Use();
+                    return;
+                }
             }
 
             var oldLabelWidth = EditorGUIUtility.labelWidth;
@@ -82,7 +87,7 @@ namespace Kogane.Internal
 
             EditorGUIUtility.labelWidth = oldLabelWidth;
 
-            using ( new EditorGUI.DisabledScope( string.IsNullOrWhiteSpace( m_name ) ) )
+            using ( new EditorGUI.DisabledScope( !CanCreate ) )
             {
                 if ( GUILayout.Button( "Create" ) )
                 {
