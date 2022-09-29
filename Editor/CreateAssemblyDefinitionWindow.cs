@@ -16,9 +16,10 @@ namespace Kogane.Internal
         private string m_name      = "NewAssembly";
         private bool   m_isEditor;
         private bool   m_allowUnsafeCode;
-        private bool   m_overrideReferences;
-        private bool   m_noEngineReferences;
         private bool   m_autoReferenced = true;
+        private bool   m_noEngineReferences;
+        private bool   m_overrideReferences;
+        private string m_rootNameSpace;
         private bool   m_isInitialized;
 
         private bool CanCreate => !string.IsNullOrWhiteSpace( m_name );
@@ -81,8 +82,9 @@ namespace Kogane.Internal
             m_name               = EditorGUILayout.TextField( "Name", m_name );
             m_allowUnsafeCode    = EditorGUILayout.Toggle( "Allow 'unsafe' Code", m_allowUnsafeCode );
             m_autoReferenced     = EditorGUILayout.Toggle( "Auto Referenced", m_autoReferenced );
-            m_overrideReferences = EditorGUILayout.Toggle( "Override References", m_overrideReferences );
             m_noEngineReferences = EditorGUILayout.Toggle( "No Engine References", m_noEngineReferences );
+            m_overrideReferences = EditorGUILayout.Toggle( "Override References", m_overrideReferences );
+            m_rootNameSpace      = EditorGUILayout.TextField( "Root Namespace", m_rootNameSpace );
             m_isEditor           = EditorGUILayout.Toggle( "Is Editor", m_isEditor );
 
             EditorGUIUtility.labelWidth = oldLabelWidth;
