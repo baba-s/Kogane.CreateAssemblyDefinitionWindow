@@ -12,6 +12,7 @@ namespace Kogane.Internal
         private AssemblyDefinitionSetting m_setting;
         private Editor                    m_settingEditor;
         private Vector2                   m_scrollPosition;
+        private bool                      m_isInitialized;
 
         [MenuItem( "Assets/Kogane/Create Assembly Definition", priority = 1156162169 )]
         private static void Open()
@@ -63,6 +64,12 @@ namespace Kogane.Internal
             }
 
             m_scrollPosition = scope.scrollPosition;
+
+            if ( !m_isInitialized )
+            {
+                m_isInitialized = true;
+                EditorGUI.FocusTextInControl( "Name" );
+            }
         }
 
         private static void OnPropertyField( SerializedProperty serializedProperty )
@@ -71,6 +78,11 @@ namespace Kogane.Internal
             {
                 EditorGUILayout.PropertyField( serializedProperty, new GUIContent( "Allow 'unsafe' Code" ), true );
                 return;
+            }
+
+            if ( serializedProperty.propertyPath == "m_name" )
+            {
+                GUI.SetNextControlName( "Name" );
             }
 
             EditorGUILayout.PropertyField( serializedProperty, true );
