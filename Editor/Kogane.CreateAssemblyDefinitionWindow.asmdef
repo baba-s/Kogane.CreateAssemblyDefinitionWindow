@@ -2,7 +2,8 @@
     "name": "Kogane.CreateAssemblyDefinitionWindow",
     "rootNamespace": "",
     "references": [
-        "GUID:f79b208da70018b4e99cfff6da005587"
+        "GUID:f79b208da70018b4e99cfff6da005587",
+        "GUID:15a136a9c4af4f742a66779bc42cbe15"
     ],
     "includePlatforms": [
         "Editor"

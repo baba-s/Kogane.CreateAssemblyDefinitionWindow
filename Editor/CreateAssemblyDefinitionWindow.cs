@@ -51,7 +51,8 @@ namespace Kogane.Internal
             using var scope = new EditorGUILayout.ScrollViewScope( m_scrollPosition );
 
             EditorGUILayout.LabelField( "Directory Name", m_directoryName );
-            DoDrawDefaultInspector( m_settingEditor.serializedObject );
+
+            m_settingEditor.OnInspectorGUIWithoutScript( OnPropertyField );
 
             using ( new EditorGUI.DisabledScope( !m_setting.CanCreate ) )
             {
@@ -64,31 +65,15 @@ namespace Kogane.Internal
             m_scrollPosition = scope.scrollPosition;
         }
 
-        private static bool DoDrawDefaultInspector( SerializedObject serializedObject )
+        private static void OnPropertyField( SerializedProperty serializedProperty )
         {
-            using var scope = new EditorGUI.ChangeCheckScope();
-
-            serializedObject.UpdateIfRequiredOrScript();
-
-            var iterator = serializedObject.GetIterator();
-
-            for ( var enterChildren = true; iterator.NextVisible( enterChildren ); enterChildren = false )
+            if ( serializedProperty.propertyPath == "m_allowUnsafeCode" )
             {
-                var propertyPath = iterator.propertyPath;
-
-                if ( propertyPath == "m_Script" ) continue;
-                if ( propertyPath == "m_allowUnsafeCode" )
-                {
-                    EditorGUILayout.PropertyField( iterator, new GUIContent( "Allow 'unsafe' Code" ), true );
-                    continue;
-                }
-
-                EditorGUILayout.PropertyField( iterator, true );
+                EditorGUILayout.PropertyField( serializedProperty, new GUIContent( "Allow 'unsafe' Code" ), true );
+                return;
             }
 
-            serializedObject.ApplyModifiedProperties();
-
-            return scope.changed;
+            EditorGUILayout.PropertyField( serializedProperty, true );
         }
 
         private void OnCreate()
