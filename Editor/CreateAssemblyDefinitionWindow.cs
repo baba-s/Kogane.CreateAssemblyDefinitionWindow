@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 using UnityEditor;
@@ -9,32 +8,26 @@ namespace Kogane.Internal
 {
     internal sealed class CreateAssemblyDefinitionWindow : EditorWindow
     {
-        private const float WINDOW_HEIGHT = 164;
-        private const float LABEL_WIDTH   = 144;
-
-        private string m_directory = string.Empty;
-        private string m_name      = "NewAssembly";
-        private bool   m_isEditor;
-        private bool   m_allowUnsafeCode;
-        private bool   m_autoReferenced = true;
-        private bool   m_noEngineReferences;
-        private bool   m_overrideReferences;
-        private string m_rootNameSpace;
-        private bool   m_isInitialized;
-
-        private bool CanCreate => !string.IsNullOrWhiteSpace( m_name );
+        private string                    m_directoryName = string.Empty;
+        private AssemblyDefinitionSetting m_setting;
+        private Editor                    m_settingEditor;
+        private Vector2                   m_scrollPosition;
 
         [MenuItem( "Assets/Kogane/Create Assembly Definition", priority = 1156162169 )]
         private static void Open()
         {
             var asset     = Selection.activeObject;
             var assetPath = AssetDatabase.GetAssetPath( asset );
-            var directory = string.IsNullOrWhiteSpace( assetPath ) ? "Assets" : assetPath;
 
-            if ( !AssetDatabase.IsValidFolder( directory ) )
+            var directoryName = string.IsNullOrWhiteSpace( assetPath )
+                    ? "Assets"
+                    : assetPath
+                ;
+
+            if ( !AssetDatabase.IsValidFolder( directoryName ) )
             {
-                directory = Path
-                        .GetDirectoryName( directory )
+                directoryName = Path
+                        .GetDirectoryName( directoryName )
                         ?.Replace( "\\", "/" )
                     ;
             }
@@ -46,50 +39,21 @@ namespace Kogane.Internal
                 focus: true
             );
 
-            window.m_directory = directory;
-            window.m_isEditor  = directory.Split( '/' ).Contains( "Editor" );
+            window.m_directoryName    = directoryName;
+            window.m_setting          = CreateInstance<AssemblyDefinitionSetting>();
+            window.m_setting.IsEditor = directoryName.Split( '/' ).Contains( "Editor" );
 
-            var minSize = window.minSize;
-            var maxSize = window.maxSize;
-
-            minSize.y = WINDOW_HEIGHT;
-            maxSize.y = WINDOW_HEIGHT;
-
-            window.minSize = minSize;
-            window.maxSize = maxSize;
+            Editor.CreateCachedEditor( window.m_setting, null, ref window.m_settingEditor );
         }
 
         private void OnGUI()
         {
-            var current = Event.current;
+            using var scope = new EditorGUILayout.ScrollViewScope( m_scrollPosition );
 
-            if ( current.keyCode == KeyCode.Return )
-            {
-                if ( CanCreate )
-                {
-                    OnCreate();
-                    current.Use();
-                    return;
-                }
-            }
+            EditorGUILayout.LabelField( "Directory Name", m_directoryName );
+            DoDrawDefaultInspector( m_settingEditor.serializedObject );
 
-            var oldLabelWidth = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = LABEL_WIDTH;
-
-            EditorGUILayout.LabelField( "Path", m_directory );
-
-            GUI.SetNextControlName( "Name" );
-            m_name               = EditorGUILayout.TextField( "Name", m_name );
-            m_allowUnsafeCode    = EditorGUILayout.Toggle( "Allow 'unsafe' Code", m_allowUnsafeCode );
-            m_autoReferenced     = EditorGUILayout.Toggle( "Auto Referenced", m_autoReferenced );
-            m_noEngineReferences = EditorGUILayout.Toggle( "No Engine References", m_noEngineReferences );
-            m_overrideReferences = EditorGUILayout.Toggle( "Override References", m_overrideReferences );
-            m_rootNameSpace      = EditorGUILayout.TextField( "Root Namespace", m_rootNameSpace );
-            m_isEditor           = EditorGUILayout.Toggle( "Is Editor", m_isEditor );
-
-            EditorGUIUtility.labelWidth = oldLabelWidth;
-
-            using ( new EditorGUI.DisabledScope( !CanCreate ) )
+            using ( new EditorGUI.DisabledScope( !m_setting.CanCreate ) )
             {
                 if ( GUILayout.Button( "Create" ) )
                 {
@@ -97,29 +61,44 @@ namespace Kogane.Internal
                 }
             }
 
-            if ( !m_isInitialized )
-            {
-                m_isInitialized = true;
+            m_scrollPosition = scope.scrollPosition;
+        }
 
-                EditorGUI.FocusTextInControl( "Name" );
+        private static bool DoDrawDefaultInspector( SerializedObject serializedObject )
+        {
+            using var scope = new EditorGUI.ChangeCheckScope();
+
+            serializedObject.UpdateIfRequiredOrScript();
+
+            var iterator = serializedObject.GetIterator();
+
+            for ( var enterChildren = true; iterator.NextVisible( enterChildren ); enterChildren = false )
+            {
+                var propertyPath = iterator.propertyPath;
+
+                if ( propertyPath == "m_Script" ) continue;
+                if ( propertyPath == "m_allowUnsafeCode" )
+                {
+                    EditorGUILayout.PropertyField( iterator, new GUIContent( "Allow 'unsafe' Code" ), true );
+                    continue;
+                }
+
+                EditorGUILayout.PropertyField( iterator, true );
             }
+
+            serializedObject.ApplyModifiedProperties();
+
+            return scope.changed;
         }
 
         private void OnCreate()
         {
-            var path       = $"{m_directory}/{m_name}.asmdef";
-            var uniquePath = AssetDatabase.GenerateUniqueAssetPath( path );
-
-            var data = new JsonAssemblyDefinition
-            {
-                name             = Path.GetFileNameWithoutExtension( uniquePath ),
-                includePlatforms = m_isEditor ? new[] { "Editor" } : Array.Empty<string>(),
-                autoReferenced   = m_autoReferenced,
-            };
-
-            var json = JsonUtility.ToJson( data, true );
-
-            File.WriteAllText( uniquePath, json, Encoding.UTF8 );
+            File.WriteAllText
+            (
+                path: m_setting.GetPath( m_directoryName ),
+                contents: m_setting.ToJson(),
+                encoding: Encoding.UTF8
+            );
 
             AssetDatabase.Refresh();
 
