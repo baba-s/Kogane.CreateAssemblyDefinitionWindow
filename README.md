@@ -21,4 +21,8 @@ Project ウィンドウを右クリックして「Kogane > Create Assembly Defin
 
 と2回コンパイルが走りますが、本パッケージを使用する場合は  
 最初から設定が反映された状態の Assembly Definition を作成できるため  
-コンパイルの回数を1回に抑えられます  
+コンパイルの回数を1回に抑えられます
+
+## 依存しているパッケージ
+
+* https://github.com/baba-s/Kogane.JsonAssemblyDefinition
