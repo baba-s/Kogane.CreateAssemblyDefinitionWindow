@@ -49,11 +49,14 @@ namespace Kogane.Internal
 
         private void OnGUI()
         {
-            using var scope = new EditorGUILayout.ScrollViewScope( m_scrollPosition );
+            using ( var scope = new EditorGUILayout.ScrollViewScope( m_scrollPosition ) )
+            {
+                EditorGUILayout.LabelField( "Directory Name", m_directoryName );
 
-            EditorGUILayout.LabelField( "Directory Name", m_directoryName );
+                m_settingEditor.OnInspectorGUIWithoutScript( OnPropertyField );
 
-            m_settingEditor.OnInspectorGUIWithoutScript( OnPropertyField );
+                m_scrollPosition = scope.scrollPosition;
+            }
 
             using ( new EditorGUI.DisabledScope( !m_setting.CanCreate ) )
             {
@@ -62,8 +65,6 @@ namespace Kogane.Internal
                     OnCreate();
                 }
             }
-
-            m_scrollPosition = scope.scrollPosition;
 
             if ( !m_isInitialized )
             {
