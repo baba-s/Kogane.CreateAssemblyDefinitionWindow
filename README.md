@@ -4,11 +4,7 @@ Assembly Definition を作成する時のコンパイル回数を抑えられる
 
 ## 使い方
 
-![2022-08-26_213623](https://user-images.githubusercontent.com/6134875/186905108-0162050e-a9f4-4b89-90f0-9f020a9f2e3c.png)
-
-Project ビューのコンテキストメニューから「Kogane > Open Assembly Definition Creator」を選択して
-
-![2022-08-26_213647](https://user-images.githubusercontent.com/6134875/186905120-b6ab7106-a2cb-4b02-8e0c-1afd62d47d2c.png)
+Project ウィンドウを右クリックして「Kogane > Create Assembly Definition」を選択して
 
 表示されたウィンドウで Assembly Definition を作成することができます
 
