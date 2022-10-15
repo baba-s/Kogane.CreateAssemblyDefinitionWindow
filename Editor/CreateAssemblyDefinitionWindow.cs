@@ -77,7 +77,7 @@ namespace Kogane.Internal
         {
             if ( serializedProperty.propertyPath == "m_allowUnsafeCode" )
             {
-                EditorGUILayout.PropertyField( serializedProperty, new GUIContent( "Allow 'unsafe' Code" ), true );
+                EditorGUILayout.PropertyField( serializedProperty, new( "Allow 'unsafe' Code" ), true );
                 return;
             }
 
